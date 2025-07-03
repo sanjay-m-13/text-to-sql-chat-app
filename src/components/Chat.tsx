@@ -3,7 +3,6 @@
 import { Box } from "@mui/material";
 import { useState } from "react";
 import ConversationHistory from "./ConversationHistory";
-import ChatHeader from "./ChatHeader";
 import ConversationArea from "./ConversationArea";
 import ChatInput from "./ChatInput";
 import { useChat } from "@ai-sdk/react";
@@ -29,7 +28,12 @@ export default function Chat() {
 
   return (
     <Box
-      sx={{ display: "flex", height: "100vh", bgcolor: "background.default" }}
+      sx={{
+        display: "flex",
+        height: "100vh",
+        bgcolor: "background.default",
+        overflow: "hidden",
+      }}
     >
       <ConversationHistory
         selectedConversation={selectedConversation}
@@ -37,8 +41,15 @@ export default function Chat() {
         onNewConversation={handleNewConversation}
       />
 
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-        <ChatHeader />
+      <Box
+        sx={{
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+          overflow: "hidden",
+        }}
+      >
         <ConversationArea messages={messages} isLoading={isLoading} />
         <ChatInput
           input={input}

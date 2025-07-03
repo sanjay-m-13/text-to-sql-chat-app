@@ -114,9 +114,11 @@ Guidelines:
 - Only generate SELECT queries for data retrieval
 - Use proper PostgreSQL syntax
 - Include appropriate WHERE clauses, JOINs, and ORDER BY when needed
-- Limit results to reasonable amounts (use LIMIT)
+- Limit results to reasonable amounts (use LIMIT 50 for large datasets)
 - Always explain what the query does
-- Use the executeQuery tool to run queries and show results`,
+- Use the executeQuery tool to run queries and show results
+- For aggregated data (COUNT, SUM, AVG), suggest appropriate visualizations
+- When showing customer data, include counts and summaries for better insights`,
       tools: {
         executeQuery: tool({
           description: 'Execute a PostgreSQL SELECT query and return both the SQL and results',

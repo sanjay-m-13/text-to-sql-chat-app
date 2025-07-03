@@ -1,17 +1,14 @@
-'use client';
+"use client";
 
 import {
   Box,
-  Drawer,
   Typography,
   List,
   ListItem,
   ListItemButton,
-  Divider,
   Button,
-  Grow,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 
 const drawerWidth = 280;
 
@@ -55,96 +52,124 @@ export default function ConversationHistory({
   onNewConversation,
 }: ConversationHistoryProps) {
   return (
-    <Drawer
-      variant="permanent"
+    <Box
       sx={{
         width: drawerWidth,
-        flexShrink: 0,
-        '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          boxSizing: 'border-box',
-          bgcolor: 'grey.50',
-          borderRight: '1px solid',
-          borderColor: 'grey.200',
-        },
+        height: "100vh",
+        bgcolor: "grey.50",
+        borderRight: "1px solid",
+        borderColor: "grey.200",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
-      <Box sx={{ p: 3 }}>
-        <Typography variant="h6" sx={{ fontWeight: 700, color: 'primary.main', mb: 2 }}>
-          SQL Assistant
-        </Typography>
+      {/* Header */}
+      <Box sx={{ p: 3, borderBottom: "1px solid", borderColor: "grey.200" }}>
         <Button
           fullWidth
-          variant="contained"
+          variant="outlined"
           startIcon={<AddIcon />}
           onClick={onNewConversation}
           sx={{
-            mb: 3,
             py: 1.5,
-            bgcolor: 'primary.main',
-            '&:hover': { bgcolor: 'primary.dark' },
-            boxShadow: '0 4px 12px rgb(99 102 241 / 0.15)',
+            borderRadius: "8px",
+            borderColor: "grey.300",
+            color: "text.primary",
+            "&:hover": {
+              borderColor: "grey.400",
+              bgcolor: "grey.100",
+            },
+            textTransform: "none",
+            fontWeight: 500,
           }}
         >
-          New Conversation
+          New chat
         </Button>
       </Box>
-      
-      <Divider />
-      
-      <Box sx={{ px: 2, py: 1 }}>
-        <Typography variant="body2" sx={{ color: 'grey.600', fontWeight: 600, mb: 1, px: 1 }}>
-          Recent Conversations
+
+      {/* Conversations List */}
+      <Box sx={{ flex: 1, overflow: "auto", px: 2, py: 2 }}>
+        <Typography
+          variant="body2"
+          sx={{
+            color: "text.secondary",
+            mb: 2,
+            px: 2,
+            fontSize: "12px",
+            fontWeight: 500,
+            textTransform: "uppercase",
+            letterSpacing: "0.5px",
+          }}
+        >
+          Recent
         </Typography>
-      </Box>
-      
-      <List sx={{ px: 2, flex: 1 }}>
-        {conversationHistory.map((conversation, index) => (
-          <Grow key={conversation.id} in timeout={300 + index * 100}>
-            <ListItem disablePadding sx={{ mb: 1 }}>
+
+        <List sx={{ p: 0 }}>
+          {conversationHistory.map((conversation, index) => (
+            <ListItem key={conversation.id} disablePadding sx={{ mb: 0.5 }}>
               <ListItemButton
                 selected={selectedConversation === conversation.id}
                 onClick={() => onSelectConversation(conversation.id)}
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: "8px",
                   py: 1.5,
                   px: 2,
-                  '&.Mui-selected': {
-                    bgcolor: 'primary.50',
-                    borderLeft: '3px solid',
-                    borderColor: 'primary.main',
+                  minHeight: "auto",
+                  "&.Mui-selected": {
+                    bgcolor: "primary.main",
+                    color: "white",
+                    "&:hover": {
+                      bgcolor: "primary.dark",
+                    },
                   },
-                  '&:hover': {
-                    bgcolor: 'grey.100',
+                  "&:hover": {
+                    bgcolor:
+                      selectedConversation === conversation.id
+                        ? "primary.dark"
+                        : "grey.100",
                   },
+                  transition: "all 0.2s ease-in-out",
                 }}
               >
-                <Box sx={{ width: '100%' }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600, mb: 0.5, color: 'grey.800' }}>
+                <Box sx={{ width: "100%", overflow: "hidden" }}>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      fontWeight: 500,
+                      mb: 0.5,
+                      color:
+                        selectedConversation === conversation.id
+                          ? "white"
+                          : "text.primary",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
                     {conversation.title}
                   </Typography>
-                  <Typography 
-                    variant="caption" 
-                    sx={{ 
-                      color: 'grey.600', 
-                      display: 'block',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                      whiteSpace: 'nowrap',
-                      mb: 0.5
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color:
+                        selectedConversation === conversation.id
+                          ? "rgba(255,255,255,0.8)"
+                          : "text.secondary",
+                      display: "block",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                      fontSize: "11px",
                     }}
                   >
                     {conversation.lastMessage}
                   </Typography>
-                  <Typography variant="caption" sx={{ color: 'grey.500' }}>
-                    {conversation.timestamp}
-                  </Typography>
                 </Box>
               </ListItemButton>
             </ListItem>
-          </Grow>
-        ))}
-      </List>
-    </Drawer>
+          ))}
+        </List>
+      </Box>
+    </Box>
   );
 }

@@ -46,73 +46,66 @@ export default function MessageBubble({ message, index }: MessageBubbleProps) {
       ) || [];
 
   return (
-    <Fade in timeout={300 + index * 100}>
-      <Paper
-        elevation={isUser ? 0 : 1}
+    <Box
+      sx={{
+        display: "flex",
+        gap: 3,
+        alignItems: "flex-start",
+        width: "100%",
+      }}
+    >
+      {/* Avatar */}
+      <Box
         sx={{
-          p: 3,
-          bgcolor: isUser ? "primary.50" : "background.paper",
-          borderRadius: 3,
-          border: isUser ? "1px solid" : "none",
-          borderColor: "primary.100",
-          ml: isUser ? 6 : 0,
-          mr: isUser ? 0 : 6,
+          width: 32,
+          height: 32,
+          borderRadius: "50%",
+          bgcolor: isUser ? "primary.main" : "grey.700",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
         }}
       >
-        <Box
+        {isUser ? (
+          <PersonIcon sx={{ fontSize: 18, color: "white" }} />
+        ) : (
+          <SmartToyIcon sx={{ fontSize: 18, color: "white" }} />
+        )}
+      </Box>
+
+      {/* Message Content */}
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography
+          variant="body1"
           sx={{
-            display: "flex",
-            alignItems: "flex-start",
-            gap: 2,
+            whiteSpace: "pre-wrap",
+            lineHeight: 1.7,
+            color: "text.primary",
+            fontSize: "16px",
+            fontFamily: containsSQL
+              ? 'Monaco, Menlo, "Ubuntu Mono", monospace'
+              : "inherit",
+            "& code": {
+              bgcolor: "grey.100",
+              px: 1,
+              py: 0.5,
+              borderRadius: 1,
+              fontSize: "0.875rem",
+              fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
+            },
           }}
         >
-          <Avatar
-            sx={{
-              bgcolor: isUser ? "primary.main" : "secondary.main",
-              width: 40,
-              height: 40,
-            }}
-          >
-            {isUser ? <PersonIcon /> : <SmartToyIcon />}
-          </Avatar>
-          <Box sx={{ flex: 1 }}>
-            <Typography
-              variant="caption"
-              sx={{
-                fontWeight: 600,
-                color: isUser ? "primary.main" : "secondary.main",
-                textTransform: "uppercase",
-                letterSpacing: 1,
-                mb: 1,
-                display: "block",
-              }}
-            >
-              {isUser ? "You" : "Assistant"}
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                whiteSpace: "pre-wrap",
-                lineHeight: 1.6,
-                fontFamily: containsSQL
-                  ? 'Monaco, Menlo, "Ubuntu Mono", monospace'
-                  : "inherit",
-                bgcolor: containsSQL ? "grey.100" : "transparent",
-                p: containsSQL ? 2 : 0,
-                borderRadius: 2,
-                fontSize: containsSQL ? "0.875rem" : "inherit",
-              }}
-            >
-              {message.content}
-            </Typography>
+          {message.content}
+        </Typography>
 
-            {/* Render query results */}
-            {toolResults.map((result, resultIndex: number) => (
-              <QueryResult key={resultIndex} result={result} />
-            ))}
+        {/* Render query results */}
+        {toolResults.map((result, resultIndex: number) => (
+          <Box key={resultIndex} sx={{ mt: 3 }}>
+            <QueryResult result={result} />
           </Box>
-        </Box>
-      </Paper>
-    </Fade>
+        ))}
+      </Box>
+    </Box>
   );
 }

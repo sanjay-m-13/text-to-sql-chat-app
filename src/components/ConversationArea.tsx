@@ -54,24 +54,26 @@ export default function ConversationArea({
     <Box
       sx={{
         flex: 1,
-        overflow: "hidden",
+        overflow: "auto",
         display: "flex",
         flexDirection: "column",
       }}
     >
-      <Box sx={{ flex: 1, overflow: "auto", p: 3 }}>
-        {messages.length === 0 ? (
-          <WelcomeScreen />
-        ) : (
-          <Stack spacing={3}>
+      {messages.length === 0 ? (
+        <WelcomeScreen />
+      ) : (
+        <Box
+          sx={{ maxWidth: "768px", mx: "auto", width: "100%", px: 3, py: 4 }}
+        >
+          <Stack spacing={6}>
             {messages.map((message, index) => (
               <MessageBubble key={message.id} message={message} index={index} />
             ))}
             {isLoading && <LoadingMessage />}
           </Stack>
-        )}
-        <div ref={messagesEndRef} />
-      </Box>
+          <div ref={messagesEndRef} />
+        </Box>
+      )}
     </Box>
   );
 }
