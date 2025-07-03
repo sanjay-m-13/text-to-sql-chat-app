@@ -1,30 +1,54 @@
-'use client';
+"use client";
 
-import {
-  Box,
-  Stack,
-} from '@mui/material';
-import { Message } from 'ai';
-import { useRef, useEffect } from 'react';
-import WelcomeScreen from './WelcomeScreen';
-import MessageBubble from './MessageBubble';
-import LoadingMessage from './LoadingMessage';
+import { Box, Stack } from "@mui/material";
+import { Message } from "ai";
+import { useRef, useEffect, useCallback } from "react";
+import WelcomeScreen from "./WelcomeScreen";
+import MessageBubble from "./MessageBubble";
+import LoadingMessage from "./LoadingMessage";
 
 interface ConversationAreaProps {
   messages: Message[];
   isLoading: boolean;
 }
 
-export default function ConversationArea({ messages, isLoading }: ConversationAreaProps) {
+export default function ConversationArea({
+  messages,
+  isLoading,
+}: ConversationAreaProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(0);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  const scrollToBottom = useCallback(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, []);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    // Only scroll if messages length has actually changed
+    if (messages.length !== prevMessagesLengthRef.current) {
+      prevMessagesLengthRef.current = messages.length;
+
+      // Use a small delay to ensure DOM is updated and prevent infinite loops
+      const timeoutId = setTimeout(() => {
+        scrollToBottom();
+      }, 50);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [messages.length, scrollToBottom]);
+
+  // Also scroll when loading state changes (when a response starts/ends)
+  useEffect(() => {
+    if (!isLoading && messages.length > 0) {
+      const timeoutId = setTimeout(() => {
+        scrollToBottom();
+      }, 100);
+
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isLoading, scrollToBottom, messages.length]);
 
   return (
     <Box
@@ -41,11 +65,7 @@ export default function ConversationArea({ messages, isLoading }: ConversationAr
         ) : (
           <Stack spacing={3}>
             {messages.map((message, index) => (
-              <MessageBubble
-                key={message.id}
-                message={message}
-                index={index}
-              />
+              <MessageBubble key={message.id} message={message} index={index} />
             ))}
             {isLoading && <LoadingMessage />}
           </Stack>
