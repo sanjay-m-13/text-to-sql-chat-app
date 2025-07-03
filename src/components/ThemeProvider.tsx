@@ -1,138 +1,68 @@
 "use client";
 
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
+import { ConfigProvider, theme } from "antd";
 import { ReactNode } from "react";
 
-const theme = createTheme({
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#10a37f",
-      light: "#1a9f7a",
-      dark: "#0d8f6f",
-    },
-    secondary: {
-      main: "#6366f1",
-      light: "#818cf8",
-      dark: "#4f46e5",
-    },
-    background: {
-      default: "#ffffff",
-      paper: "#ffffff",
-    },
-    grey: {
-      50: "#f9fafb",
-      100: "#f3f4f6",
-      200: "#e5e7eb",
-      300: "#d1d5db",
-      400: "#9ca3af",
-      500: "#6b7280",
-      600: "#4b5563",
-      700: "#374151",
-      800: "#1f2937",
-      900: "#111827",
-    },
-    text: {
-      primary: "#374151",
-      secondary: "#6b7280",
-    },
-  },
-  typography: {
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-    h4: {
-      fontWeight: 600,
-      letterSpacing: "-0.025em",
-      fontSize: "1.875rem",
-    },
-    h5: {
-      fontWeight: 600,
-      fontSize: "1.5rem",
-    },
-    h6: {
-      fontWeight: 600,
-      fontSize: "1.25rem",
-    },
-    body1: {
-      lineHeight: 1.7,
-      fontSize: "1rem",
-    },
-    body2: {
-      lineHeight: 1.6,
-      fontSize: "0.875rem",
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiPaper: {
-      styleOverrides: {
-        root: {
-          backgroundImage: "none",
-          boxShadow: "none",
-          border: "1px solid #e5e7eb",
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          textTransform: "none",
-          fontWeight: 500,
-          borderRadius: 6,
-          padding: "8px 16px",
-        },
-        contained: {
-          boxShadow: "none",
-          "&:hover": {
-            boxShadow: "none",
-          },
-        },
-      },
-    },
-    MuiTextField: {
-      styleOverrides: {
-        root: {
-          "& .MuiOutlinedInput-root": {
-            borderRadius: 12,
-            backgroundColor: "#ffffff",
-            "& fieldset": {
-              borderColor: "#d1d5db",
-            },
-            "&:hover fieldset": {
-              borderColor: "#9ca3af",
-            },
-            "&.Mui-focused fieldset": {
-              borderColor: "#10a37f",
-              borderWidth: 2,
-            },
-          },
-        },
-      },
-    },
-    MuiIconButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: 8,
-        },
-      },
-    },
-  },
-});
-
-interface CustomThemeProviderProps {
+interface AntdThemeProviderProps {
   children: ReactNode;
 }
 
-export default function CustomThemeProvider({
+export default function AntdThemeProvider({
   children,
-}: CustomThemeProviderProps) {
+}: AntdThemeProviderProps) {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
+    <ConfigProvider
+      theme={{
+        algorithm: theme.defaultAlgorithm,
+        token: {
+          colorPrimary: "#10a37f",
+          colorSuccess: "#52c41a",
+          colorWarning: "#faad14",
+          colorError: "#ff4d4f",
+          colorInfo: "#1677ff",
+          borderRadius: 8,
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+          fontSize: 14,
+          colorBgContainer: "#ffffff",
+          colorBgElevated: "#ffffff",
+          colorBgLayout: "#f5f5f5",
+          colorBorder: "#d9d9d9",
+          colorBorderSecondary: "#f0f0f0",
+          colorText: "#262626",
+          colorTextSecondary: "#8c8c8c",
+          colorTextTertiary: "#bfbfbf",
+          boxShadow:
+            "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px 0 rgba(0, 0, 0, 0.02)",
+          boxShadowSecondary:
+            "0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+        },
+        components: {
+          Button: {
+            borderRadius: 6,
+            fontWeight: 500,
+          },
+          Input: {
+            borderRadius: 8,
+            paddingInline: 12,
+          },
+          Card: {
+            borderRadius: 12,
+            boxShadow:
+              "0 1px 2px 0 rgba(0, 0, 0, 0.03), 0 1px 6px -1px rgba(0, 0, 0, 0.02)",
+          },
+          Table: {
+            borderRadius: 8,
+          },
+          Tabs: {
+            inkBarColor: "#10a37f",
+            itemActiveColor: "#10a37f",
+            itemHoverColor: "#52c41a",
+          },
+        },
+      }}
+    >
       {children}
-    </ThemeProvider>
+    </ConfigProvider>
   );
 }

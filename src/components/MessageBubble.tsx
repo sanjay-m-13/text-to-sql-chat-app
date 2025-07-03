@@ -1,8 +1,7 @@
 "use client";
 
-import { Paper, Box, Avatar, Typography, Fade } from "@mui/material";
-import PersonIcon from "@mui/icons-material/Person";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { Typography, Avatar, Space } from "antd";
+import { UserOutlined, RobotOutlined } from "@ant-design/icons";
 import { Message } from "ai";
 import QueryResult from "./QueryResult";
 
@@ -46,66 +45,50 @@ export default function MessageBubble({ message, index }: MessageBubbleProps) {
       ) || [];
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
-        gap: 3,
+        gap: "24px",
         alignItems: "flex-start",
         width: "100%",
       }}
     >
       {/* Avatar */}
-      <Box
-        sx={{
-          width: 32,
-          height: 32,
-          borderRadius: "50%",
-          bgcolor: isUser ? "primary.main" : "grey.700",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+      <Avatar
+        size={32}
+        style={{
+          backgroundColor: isUser ? "#10a37f" : "#595959",
           flexShrink: 0,
         }}
-      >
-        {isUser ? (
-          <PersonIcon sx={{ fontSize: 18, color: "white" }} />
-        ) : (
-          <SmartToyIcon sx={{ fontSize: 18, color: "white" }} />
-        )}
-      </Box>
+        icon={isUser ? <UserOutlined /> : <RobotOutlined />}
+      />
 
       {/* Message Content */}
-      <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography
-          variant="body1"
-          sx={{
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <Typography.Paragraph
+          style={{
             whiteSpace: "pre-wrap",
             lineHeight: 1.7,
-            color: "text.primary",
+            color: "#262626",
             fontSize: "16px",
             fontFamily: containsSQL
               ? 'Monaco, Menlo, "Ubuntu Mono", monospace'
               : "inherit",
-            "& code": {
-              bgcolor: "grey.100",
-              px: 1,
-              py: 0.5,
-              borderRadius: 1,
-              fontSize: "0.875rem",
-              fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-            },
+            marginBottom: toolResults.length > 0 ? "24px" : 0,
           }}
         >
           {message.content}
-        </Typography>
+        </Typography.Paragraph>
 
         {/* Render query results */}
-        {toolResults.map((result, resultIndex: number) => (
-          <Box key={resultIndex} sx={{ mt: 3 }}>
-            <QueryResult result={result} />
-          </Box>
-        ))}
-      </Box>
-    </Box>
+        {toolResults.length > 0 && (
+          <Space direction="vertical" size={24} style={{ width: "100%" }}>
+            {toolResults.map((result, resultIndex: number) => (
+              <QueryResult key={resultIndex} result={result} />
+            ))}
+          </Space>
+        )}
+      </div>
+    </div>
   );
 }

@@ -1,27 +1,14 @@
 "use client";
 
+import { Typography, Card, Row, Col, Tag, List, Space } from "antd";
 import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  Grid,
-  Chip,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  Stack,
-} from "@mui/material";
-import {
-  Assessment as AssessmentIcon,
-  TableChart as TableIcon,
-  TrendingUp as TrendingUpIcon,
-  PieChart as PieChartIcon,
-  ScatterPlot as ScatterPlotIcon,
-  BarChart as BarChartIcon,
-} from "@mui/icons-material";
+  FileTextOutlined,
+  TableOutlined,
+  LineChartOutlined,
+  PieChartOutlined,
+  DotChartOutlined,
+  BarChartOutlined,
+} from "@ant-design/icons";
 import { DataSummary as DataSummaryType } from "../utils/dataAnalyzer";
 
 interface DataSummaryProps {
@@ -32,15 +19,15 @@ export default function DataSummary({ summary }: DataSummaryProps) {
   const getChartIcon = (chartType: string) => {
     switch (chartType) {
       case "bar":
-        return <BarChartIcon />;
+        return <BarChartOutlined />;
       case "line":
-        return <TrendingUpIcon />;
+        return <LineChartOutlined />;
       case "pie":
-        return <PieChartIcon />;
+        return <PieChartOutlined />;
       case "scatter":
-        return <ScatterPlotIcon />;
+        return <DotChartOutlined />;
       default:
-        return <TableIcon />;
+        return <TableOutlined />;
     }
   };
 

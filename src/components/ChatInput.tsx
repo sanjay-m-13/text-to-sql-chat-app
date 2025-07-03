@@ -1,8 +1,10 @@
 "use client";
 
-import { Box, TextField, IconButton, InputAdornment } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+import { Input, Button, Space, Typography } from "antd";
+import { SendOutlined } from "@ant-design/icons";
 import { FormEvent, KeyboardEvent } from "react";
+
+const { TextArea } = Input;
 
 interface ChatInputProps {
   input: string;
@@ -21,7 +23,7 @@ export default function ChatInput({
   onInputChange,
   onSubmit,
 }: ChatInputProps) {
-  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       if (input.trim() && !isLoading) {
@@ -38,107 +40,72 @@ export default function ChatInput({
   };
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         position: "sticky",
         bottom: 0,
-        bgcolor: "background.default",
-        borderTop: "1px solid",
-        borderColor: "grey.200",
-        p: 3,
+        backgroundColor: "#ffffff",
+        borderTop: "1px solid #f0f0f0",
+        padding: "24px",
         zIndex: 1000,
       }}
     >
-      <Box sx={{ maxWidth: "768px", mx: "auto" }}>
+      <div style={{ maxWidth: "768px", margin: "0 auto" }}>
         <form onSubmit={onSubmit}>
-          <TextField
-            fullWidth
-            multiline
-            maxRows={6}
-            placeholder="Message SQL Assistant..."
-            value={input}
-            onChange={onInputChange}
-            onKeyDown={handleKeyDown}
-            disabled={isLoading}
-            variant="outlined"
-            sx={{
-              "& .MuiOutlinedInput-root": {
+          <div style={{ display: "flex", gap: "8px", alignItems: "flex-end" }}>
+            <TextArea
+              placeholder="Message SQL Assistant..."
+              value={input}
+              onChange={onInputChange}
+              onKeyDown={handleKeyDown}
+              disabled={isLoading}
+              autoSize={{ minRows: 1, maxRows: 6 }}
+              style={{
                 borderRadius: "24px",
-                backgroundColor: "background.paper",
-                paddingRight: "4px",
-                minHeight: "56px",
-                "& fieldset": {
-                  borderColor: "grey.300",
-                },
-                "&:hover fieldset": {
-                  borderColor: "grey.400",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "primary.main",
-                  borderWidth: 2,
-                },
-                "& .MuiInputBase-input": {
-                  padding: "16px 20px",
-                  fontSize: "16px",
-                  lineHeight: 1.5,
-                },
-              },
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <IconButton
-                    type="submit"
-                    disabled={isLoading || !input.trim()}
-                    sx={{
-                      bgcolor:
-                        input.trim() && !isLoading
-                          ? "primary.main"
-                          : "grey.200",
-                      color: input.trim() && !isLoading ? "white" : "grey.500",
-                      width: 40,
-                      height: 40,
-                      mr: 1,
-                      "&:hover": {
-                        bgcolor:
-                          input.trim() && !isLoading
-                            ? "primary.dark"
-                            : "grey.300",
-                      },
-                      "&:disabled": {
-                        bgcolor: "grey.200",
-                        color: "grey.400",
-                      },
-                      transition: "all 0.2s ease-in-out",
-                    }}
-                  >
-                    <SendIcon sx={{ fontSize: 20 }} />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-          />
+                fontSize: "16px",
+                lineHeight: 1.5,
+                padding: "12px 20px",
+                resize: "none",
+                flex: 1,
+              }}
+            />
+            <Button
+              type="primary"
+              htmlType="submit"
+              disabled={isLoading || !input.trim()}
+              icon={<SendOutlined />}
+              shape="circle"
+              size="large"
+              style={{
+                width: "48px",
+                height: "48px",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor:
+                  input.trim() && !isLoading ? "#10a37f" : "#d9d9d9",
+                borderColor: input.trim() && !isLoading ? "#10a37f" : "#d9d9d9",
+              }}
+            />
+          </div>
         </form>
 
         {/* Helper text */}
-        <Box sx={{ mt: 2, textAlign: "center" }}>
-          <Box
-            component="span"
-            sx={{
+        <div style={{ marginTop: "16px", textAlign: "center" }}>
+          <Typography.Text
+            type="secondary"
+            style={{
               fontSize: "12px",
-              color: "text.secondary",
-              bgcolor: "grey.50",
-              px: 2,
-              py: 0.5,
+              backgroundColor: "#f9f9f9",
+              padding: "4px 12px",
               borderRadius: "12px",
-              border: "1px solid",
-              borderColor: "grey.200",
+              border: "1px solid #f0f0f0",
             }}
           >
             Press Enter to send, Shift + Enter for new line
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </Typography.Text>
+        </div>
+      </div>
+    </div>
   );
 }

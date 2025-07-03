@@ -1,53 +1,37 @@
 "use client";
 
-import {
-  Paper,
-  Box,
-  Avatar,
-  Typography,
-  CircularProgress,
-} from "@mui/material";
-import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { Typography, Avatar, Spin } from "antd";
+import { RobotOutlined } from "@ant-design/icons";
 
 export default function LoadingMessage() {
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
-        gap: 3,
+        gap: "24px",
         alignItems: "flex-start",
         width: "100%",
       }}
     >
       {/* Avatar */}
-      <Box
-        sx={{
-          width: 32,
-          height: 32,
-          borderRadius: "50%",
-          bgcolor: "grey.700",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+      <Avatar
+        size={32}
+        style={{
+          backgroundColor: "#595959",
           flexShrink: 0,
         }}
-      >
-        <SmartToyIcon sx={{ fontSize: 18, color: "white" }} />
-      </Box>
+        icon={<RobotOutlined />}
+      />
 
       {/* Loading Content */}
-      <Box sx={{ flex: 1, minWidth: 0, pt: 0.5 }}>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-          <CircularProgress size={16} sx={{ color: "primary.main" }} />
-          <Typography
-            variant="body1"
-            color="text.secondary"
-            sx={{ fontSize: "16px" }}
-          >
+      <div style={{ flex: 1, minWidth: 0, paddingTop: "4px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
+          <Spin size="small" />
+          <Typography.Text type="secondary" style={{ fontSize: "16px" }}>
             Analyzing your query and generating results...
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+          </Typography.Text>
+        </div>
+      </div>
+    </div>
   );
 }

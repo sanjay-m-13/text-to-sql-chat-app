@@ -1,6 +1,5 @@
 "use client";
 
-import { Box } from "@mui/material";
 import { useState } from "react";
 import ConversationHistory from "./ConversationHistory";
 import ConversationArea from "./ConversationArea";
@@ -27,11 +26,11 @@ export default function Chat() {
   };
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         display: "flex",
         height: "100vh",
-        bgcolor: "background.default",
+        backgroundColor: "#ffffff",
         overflow: "hidden",
       }}
     >
@@ -41,8 +40,8 @@ export default function Chat() {
         onNewConversation={handleNewConversation}
       />
 
-      <Box
-        sx={{
+      <div
+        style={{
           flexGrow: 1,
           display: "flex",
           flexDirection: "column",
@@ -57,7 +56,7 @@ export default function Chat() {
           onInputChange={handleInputChange}
           onSubmit={handleSubmit}
         />
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 }

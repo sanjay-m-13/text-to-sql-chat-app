@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Stack } from "@mui/material";
+import { Space } from "antd";
 import { Message } from "ai";
 import { useRef, useEffect, useCallback } from "react";
 import WelcomeScreen from "./WelcomeScreen";
@@ -51,8 +51,8 @@ export default function ConversationArea({
   }, [isLoading, scrollToBottom, messages.length]);
 
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         flex: 1,
         overflow: "auto",
         display: "flex",
@@ -62,18 +62,23 @@ export default function ConversationArea({
       {messages.length === 0 ? (
         <WelcomeScreen />
       ) : (
-        <Box
-          sx={{ maxWidth: "768px", mx: "auto", width: "100%", px: 3, py: 4 }}
+        <div
+          style={{
+            maxWidth: "768px",
+            margin: "0 auto",
+            width: "100%",
+            padding: "32px 24px",
+          }}
         >
-          <Stack spacing={6}>
+          <Space direction="vertical" size={48} style={{ width: "100%" }}>
             {messages.map((message, index) => (
               <MessageBubble key={message.id} message={message} index={index} />
             ))}
             {isLoading && <LoadingMessage />}
-          </Stack>
+          </Space>
           <div ref={messagesEndRef} />
-        </Box>
+        </div>
       )}
-    </Box>
+    </div>
   );
 }

@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemButton,
-  Button,
-} from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
+import { Button, Typography, List } from "antd";
+import { PlusOutlined } from "@ant-design/icons";
 
 const drawerWidth = 280;
 
@@ -52,124 +45,127 @@ export default function ConversationHistory({
   onNewConversation,
 }: ConversationHistoryProps) {
   return (
-    <Box
-      sx={{
+    <div
+      style={{
         width: drawerWidth,
         height: "100vh",
-        bgcolor: "grey.50",
-        borderRight: "1px solid",
-        borderColor: "grey.200",
+        backgroundColor: "#fafafa",
+        borderRight: "1px solid #f0f0f0",
         display: "flex",
         flexDirection: "column",
       }}
     >
       {/* Header */}
-      <Box sx={{ p: 3, borderBottom: "1px solid", borderColor: "grey.200" }}>
+      <div style={{ padding: "24px", borderBottom: "1px solid #f0f0f0" }}>
         <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<AddIcon />}
+          block
+          icon={<PlusOutlined />}
           onClick={onNewConversation}
-          sx={{
-            py: 1.5,
+          style={{
+            height: "40px",
             borderRadius: "8px",
-            borderColor: "grey.300",
-            color: "text.primary",
-            "&:hover": {
-              borderColor: "grey.400",
-              bgcolor: "grey.100",
-            },
-            textTransform: "none",
             fontWeight: 500,
           }}
         >
           New chat
         </Button>
-      </Box>
+      </div>
 
       {/* Conversations List */}
-      <Box sx={{ flex: 1, overflow: "auto", px: 2, py: 2 }}>
-        <Typography
-          variant="body2"
-          sx={{
-            color: "text.secondary",
-            mb: 2,
-            px: 2,
+      <div style={{ flex: 1, overflow: "auto", padding: "16px" }}>
+        <Typography.Text
+          type="secondary"
+          style={{
             fontSize: "12px",
             fontWeight: 500,
             textTransform: "uppercase",
             letterSpacing: "0.5px",
+            marginBottom: "16px",
+            display: "block",
+            paddingLeft: "16px",
           }}
         >
           Recent
-        </Typography>
+        </Typography.Text>
 
-        <List sx={{ p: 0 }}>
-          {conversationHistory.map((conversation, index) => (
-            <ListItem key={conversation.id} disablePadding sx={{ mb: 0.5 }}>
-              <ListItemButton
-                selected={selectedConversation === conversation.id}
+        <List
+          dataSource={conversationHistory}
+          renderItem={(conversation) => (
+            <List.Item
+              key={conversation.id}
+              style={{
+                padding: 0,
+                marginBottom: "4px",
+                border: "none",
+              }}
+            >
+              <div
                 onClick={() => onSelectConversation(conversation.id)}
-                sx={{
+                style={{
+                  width: "100%",
+                  padding: "12px 16px",
                   borderRadius: "8px",
-                  py: 1.5,
-                  px: 2,
-                  minHeight: "auto",
-                  "&.Mui-selected": {
-                    bgcolor: "primary.main",
-                    color: "white",
-                    "&:hover": {
-                      bgcolor: "primary.dark",
-                    },
-                  },
-                  "&:hover": {
-                    bgcolor:
-                      selectedConversation === conversation.id
-                        ? "primary.dark"
-                        : "grey.100",
-                  },
+                  cursor: "pointer",
+                  backgroundColor:
+                    selectedConversation === conversation.id
+                      ? "#10a37f"
+                      : "transparent",
+                  color:
+                    selectedConversation === conversation.id
+                      ? "white"
+                      : "#262626",
                   transition: "all 0.2s ease-in-out",
                 }}
+                onMouseEnter={(e) => {
+                  if (selectedConversation !== conversation.id) {
+                    e.currentTarget.style.backgroundColor = "#f5f5f5";
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (selectedConversation !== conversation.id) {
+                    e.currentTarget.style.backgroundColor = "transparent";
+                  }
+                }}
               >
-                <Box sx={{ width: "100%", overflow: "hidden" }}>
-                  <Typography
-                    variant="body2"
-                    sx={{
+                <div style={{ overflow: "hidden" }}>
+                  <Typography.Text
+                    style={{
                       fontWeight: 500,
-                      mb: 0.5,
                       color:
                         selectedConversation === conversation.id
                           ? "white"
-                          : "text.primary",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
-                    {conversation.title}
-                  </Typography>
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      color:
-                        selectedConversation === conversation.id
-                          ? "rgba(255,255,255,0.8)"
-                          : "text.secondary",
+                          : "#262626",
                       display: "block",
                       overflow: "hidden",
                       textOverflow: "ellipsis",
                       whiteSpace: "nowrap",
+                      marginBottom: "4px",
+                    }}
+                  >
+                    {conversation.title}
+                  </Typography.Text>
+                  <Typography.Text
+                    type="secondary"
+                    style={{
                       fontSize: "11px",
+                      color:
+                        selectedConversation === conversation.id
+                          ? "rgba(255,255,255,0.8)"
+                          : "#8c8c8c",
+                      display: "block",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
                     }}
                   >
                     {conversation.lastMessage}
-                  </Typography>
-                </Box>
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </Box>
-    </Box>
+                  </Typography.Text>
+                </div>
+              </div>
+            </List.Item>
+          )}
+        />
+      </div>
+    </div>
   );
 }
