@@ -1,15 +1,10 @@
-'use client';
+"use client";
 
-import {
-  Paper,
-  Box,
-  Avatar,
-  Typography,
-  Fade,
-} from '@mui/material';
-import PersonIcon from '@mui/icons-material/Person';
-import SmartToyIcon from '@mui/icons-material/SmartToy';
-import { Message } from 'ai';
+import { Paper, Box, Avatar, Typography, Fade } from "@mui/material";
+import PersonIcon from "@mui/icons-material/Person";
+import SmartToyIcon from "@mui/icons-material/SmartToy";
+import { Message } from "ai";
+import QueryResult from "./QueryResult";
 
 interface MessageBubbleProps {
   message: Message;
@@ -17,12 +12,24 @@ interface MessageBubbleProps {
 }
 
 export default function MessageBubble({ message, index }: MessageBubbleProps) {
-  const isUser = message.role === 'user';
-  const containsSQL = message.content.includes("SELECT") ||
+  const isUser = message.role === "user";
+  const containsSQL =
+    message.content.includes("SELECT") ||
     message.content.includes("CREATE") ||
     message.content.includes("INSERT") ||
     message.content.includes("UPDATE") ||
     message.content.includes("DELETE");
+
+  // Parse tool results from message
+  const toolResults =
+    message.toolInvocations
+      ?.map((invocation) => {
+        if (invocation.toolName === "executeQuery" && invocation.result) {
+          return invocation.result;
+        }
+        return null;
+      })
+      .filter(Boolean) || [];
 
   return (
     <Fade in timeout={300 + index * 100}>
@@ -84,6 +91,11 @@ export default function MessageBubble({ message, index }: MessageBubbleProps) {
             >
               {message.content}
             </Typography>
+
+            {/* Render query results */}
+            {toolResults.map((result: any, resultIndex: number) => (
+              <QueryResult key={resultIndex} result={result} />
+            ))}
           </Box>
         </Box>
       </Paper>
