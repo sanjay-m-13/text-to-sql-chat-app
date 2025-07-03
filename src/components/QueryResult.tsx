@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Box,
@@ -15,47 +15,57 @@ import {
   Accordion,
   AccordionSummary,
   AccordionDetails,
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import ErrorIcon from "@mui/icons-material/Error";
+
+interface QueryColumn {
+  name: string;
+  dataType: number;
+}
+
+interface QueryResultData {
+  success: boolean;
+  sql: string;
+  explanation: string;
+  data?: Record<string, unknown>[];
+  rowCount?: number;
+  columns?: QueryColumn[];
+  error?: string;
+}
 
 interface QueryResultProps {
-  result: {
-    success: boolean;
-    sql: string;
-    explanation: string;
-    data?: any[];
-    rowCount?: number;
-    columns?: Array<{ name: string; dataType: number }>;
-    error?: string;
-  };
+  result: QueryResultData;
 }
 
 export default function QueryResult({ result }: QueryResultProps) {
   return (
     <Box sx={{ mt: 2 }}>
       {/* Query Status */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
         {result.success ? (
-          <CheckCircleIcon sx={{ color: 'success.main' }} />
+          <CheckCircleIcon sx={{ color: "success.main" }} />
         ) : (
-          <ErrorIcon sx={{ color: 'error.main' }} />
+          <ErrorIcon sx={{ color: "error.main" }} />
         )}
         <Typography variant="h6" sx={{ fontWeight: 600 }}>
-          {result.success ? 'Query Executed Successfully' : 'Query Failed'}
+          {result.success ? "Query Executed Successfully" : "Query Failed"}
         </Typography>
         {result.success && result.rowCount !== undefined && (
-          <Chip 
-            label={`${result.rowCount} row${result.rowCount !== 1 ? 's' : ''}`} 
-            size="small" 
-            color="primary" 
+          <Chip
+            label={`${result.rowCount} row${result.rowCount !== 1 ? "s" : ""}`}
+            size="small"
+            color="primary"
           />
         )}
       </Box>
 
       {/* Explanation */}
-      <Typography variant="body1" sx={{ mb: 2, fontStyle: 'italic', color: 'text.secondary' }}>
+      <Typography
+        variant="body1"
+        sx={{ mb: 2, fontStyle: "italic", color: "text.secondary" }}
+      >
         {result.explanation}
       </Typography>
 
@@ -70,14 +80,14 @@ export default function QueryResult({ result }: QueryResultProps) {
           <Box
             component="pre"
             sx={{
-              bgcolor: 'grey.100',
+              bgcolor: "grey.100",
               p: 2,
               borderRadius: 1,
-              overflow: 'auto',
+              overflow: "auto",
               fontFamily: 'Monaco, Menlo, "Ubuntu Mono", monospace',
-              fontSize: '0.875rem',
+              fontSize: "0.875rem",
               lineHeight: 1.5,
-              whiteSpace: 'pre-wrap',
+              whiteSpace: "pre-wrap",
             }}
           >
             {result.sql}
@@ -96,7 +106,10 @@ export default function QueryResult({ result }: QueryResultProps) {
 
       {/* Results Table */}
       {result.success && result.data && result.data.length > 0 && (
-        <TableContainer component={Paper} sx={{ maxHeight: 400, overflow: 'auto' }}>
+        <TableContainer
+          component={Paper}
+          sx={{ maxHeight: 400, overflow: "auto" }}
+        >
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
@@ -105,9 +118,9 @@ export default function QueryResult({ result }: QueryResultProps) {
                     key={column}
                     sx={{
                       fontWeight: 600,
-                      bgcolor: 'primary.50',
-                      borderBottom: '2px solid',
-                      borderColor: 'primary.200',
+                      bgcolor: "primary.50",
+                      borderBottom: "2px solid",
+                      borderColor: "primary.200",
                     }}
                   >
                     {column}
@@ -120,11 +133,11 @@ export default function QueryResult({ result }: QueryResultProps) {
                 <TableRow
                   key={index}
                   sx={{
-                    '&:nth-of-type(odd)': {
-                      bgcolor: 'grey.50',
+                    "&:nth-of-type(odd)": {
+                      bgcolor: "grey.50",
                     },
-                    '&:hover': {
-                      bgcolor: 'primary.50',
+                    "&:hover": {
+                      bgcolor: "primary.50",
                     },
                   }}
                 >
@@ -133,7 +146,7 @@ export default function QueryResult({ result }: QueryResultProps) {
                       {value === null ? (
                         <Typography
                           variant="body2"
-                          sx={{ fontStyle: 'italic', color: 'text.secondary' }}
+                          sx={{ fontStyle: "italic", color: "text.secondary" }}
                         >
                           NULL
                         </Typography>

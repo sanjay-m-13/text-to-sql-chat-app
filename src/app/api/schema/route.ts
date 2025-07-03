@@ -68,9 +68,39 @@ export async function GET() {
       ])
 
       // Process the results
-      const tables: any = {}
+      interface TableInfo {
+        schema: string;
+        name: string;
+        type: string;
+        columns: Array<{
+          name: string;
+          type: string;
+          nullable: boolean;
+          default: string | null;
+          position: number;
+          isPrimaryKey: boolean;
+        }>;
+        foreignKeys: Array<{
+          column: string;
+          referencedSchema: string;
+          referencedTable: string;
+          referencedColumn: string;
+        }>;
+      }
 
-      schemaResult.rows.forEach((row) => {
+      const tables: Record<string, TableInfo> = {}
+
+      schemaResult.rows.forEach((row: {
+        table_schema: string;
+        table_name: string;
+        table_type: string;
+        column_name: string;
+        data_type: string;
+        is_nullable: string;
+        column_default: string | null;
+        ordinal_position: number;
+        is_primary_key: boolean;
+      }) => {
         const key = `${row.table_schema}.${row.table_name}`
         if (!tables[key]) {
           tables[key] = {
@@ -92,7 +122,14 @@ export async function GET() {
       })
 
       // Add foreign keys
-      foreignKeysResult.rows.forEach((row) => {
+      foreignKeysResult.rows.forEach((row: {
+        table_schema: string;
+        table_name: string;
+        column_name: string;
+        referenced_schema: string;
+        referenced_table: string;
+        referenced_column: string;
+      }) => {
         const key = `${row.table_schema}.${row.table_name}`
         if (tables[key]) {
           tables[key].foreignKeys.push({

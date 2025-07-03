@@ -9,6 +9,29 @@ const pool = new Pool({
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
 });
 
+// Types for database schema
+interface DatabaseColumn {
+  column_name: string;
+  data_type: string;
+  is_nullable: string;
+  column_default: string | null;
+}
+
+interface DatabaseTable {
+  table_name: string;
+  table_schema: string;
+  columns: DatabaseColumn[];
+}
+
+interface SchemaRow {
+  table_name: string;
+  table_schema: string;
+  column_name: string;
+  data_type: string;
+  is_nullable: string;
+  column_default: string | null;
+}
+
 // Function to get database schema
 async function getDatabaseSchema(): Promise<string> {
   const client = await pool.connect();
@@ -32,8 +55,8 @@ async function getDatabaseSchema(): Promise<string> {
     const result = await client.query(query);
 
     // Group by table
-    const tables: Record<string, any> = {};
-    result.rows.forEach((row: any) => {
+    const tables: Record<string, DatabaseTable> = {};
+    result.rows.forEach((row: SchemaRow) => {
       const key = `${row.table_schema}.${row.table_name}`;
       if (!tables[key]) {
         tables[key] = {
@@ -52,11 +75,11 @@ async function getDatabaseSchema(): Promise<string> {
 
     // Format schema for AI
     let schemaDescription = "Database Schema:\n\n";
-    Object.values(tables).forEach((table: any) => {
+    Object.values(tables).forEach((table: DatabaseTable) => {
       const fullTableName = table.table_schema === 'public' ? table.table_name : `${table.table_schema}.${table.table_name}`;
       schemaDescription += `Table: ${fullTableName}\n`;
       schemaDescription += "Columns:\n";
-      table.columns.forEach((col: any) => {
+      table.columns.forEach((col: DatabaseColumn) => {
         const nullable = col.is_nullable === 'YES' ? ' (nullable)' : ' (not null)';
         const defaultVal = col.column_default ? ` default: ${col.column_default}` : '';
         schemaDescription += `  - ${col.column_name}: ${col.data_type}${nullable}${defaultVal}\n`;

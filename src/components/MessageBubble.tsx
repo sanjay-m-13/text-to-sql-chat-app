@@ -24,12 +24,26 @@ export default function MessageBubble({ message, index }: MessageBubbleProps) {
   const toolResults =
     message.toolInvocations
       ?.map((invocation) => {
-        if (invocation.toolName === "executeQuery" && invocation.result) {
-          return invocation.result;
+        if (
+          invocation.toolName === "executeQuery" &&
+          "result" in invocation &&
+          invocation.result
+        ) {
+          return invocation.result as {
+            success: boolean;
+            sql: string;
+            explanation: string;
+            data?: Record<string, unknown>[];
+            rowCount?: number;
+            columns?: Array<{ name: string; dataType: number }>;
+            error?: string;
+          };
         }
         return null;
       })
-      .filter(Boolean) || [];
+      .filter(
+        (result): result is NonNullable<typeof result> => result !== null
+      ) || [];
 
   return (
     <Fade in timeout={300 + index * 100}>
@@ -93,7 +107,7 @@ export default function MessageBubble({ message, index }: MessageBubbleProps) {
             </Typography>
 
             {/* Render query results */}
-            {toolResults.map((result: any, resultIndex: number) => (
+            {toolResults.map((result, resultIndex: number) => (
               <QueryResult key={resultIndex} result={result} />
             ))}
           </Box>
